@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  title: RPN
+  version: "{{version}}"
+  description: RPN Api
+tags:
+  - name: rnp
+    description: RNP Api
+paths:
+  "/rpn/op":
+    get:
+      operationId: app.apis.v1.op.OpView.get
+      summary: Get all the operand
+      description: Get all the operand
+      responses:
+        "200":
+          description: Get list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpList"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+  "/rpn/op/{op}/stack/{stack_id}":
+    post:
+      operationId: app.apis.v1.op.OpView.post_stack
+      summary: Apply an operand to a stack
+      description: Apply an operand to a stack
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stack"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+    parameters:
+      - $ref: "#/components/parameters/op"
+      - $ref: "#/components/parameters/stack_id"
+  "/rpn/stack":
+    get:
+      operationId: app.apis.v1.stack.StackView.get_list
+      summary: List the available stacks
+      description: List the available stacks
+      responses:
+        "200":
+          description: Get List
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StackList"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+    post:
+      operationId: app.apis.v1.stack.StackView.create
+      summary: create a new stack
+      description: create a new stack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StackValueList"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stack"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+  "/rpn/stack/{stack_id}":
+    post:
+      operationId: app.apis.v1.stack.StackView.post
+      summary: Push a new value to a stack
+      description: Push a new value to a stack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StackValue"
+      responses:
+        "201":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stack"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+    get:
+      operationId: app.apis.v1.stack.StackView.get
+      summary: get a stack
+      description: get a stack
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stack"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+    delete:
+      operationId: app.apis.v1.stack.StackView.delete
+      summary: delete a stack
+      description: delete a stack
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref: "#/components/responses/400"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - rnp
+    parameters:
+        - $ref: "#/components/parameters/stack_id"
+
+
+components:
+  parameters:
+    op:
+      name: op
+      in: path
+      required: true
+      schema:
+        type: string
+        example: +
+    stack_id:
+      name: stack_id
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 2189a1cf-d544-49d6-813d-879de5564ddb
+  schemas:
+    Error:
+      type: object
+    Op:
+      type: object
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 2189a1cf-d544-49d6-813d-879de5564ddb
+        value:
+          type: string
+          description: Name of the operand
+          example: my-operand
+    OpList:
+      type: object
+      required:
+        - operands
+      properties:
+        folders:
+          type: array
+          description: Get a list of all Op
+          items:
+            $ref: "#/components/schemas/Op"
+    StackValue:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: integer
+          description: int
+          example: 1
+    StackValueList:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: array
+          description: List of int
+          example:
+            - 1
+            - 2
+            - 3
+          items:
+            type: integer
+            description: int
+            example: 1
+    Stack:
+      type: object
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 2189a1cf-d544-49d6-813d-879de5564ddb
+        value:
+          type: array
+          description: List of int
+          example:
+            - 1
+            - 2
+            - 3
+          items:
+            type: integer
+            description: int
+            example: 1
+    StackList:
+      type: object
+      required:
+        - stacks
+      properties:
+        folders:
+          type: array
+          description: Get a list of all Stack
+          items:
+            $ref: "#/components/schemas/Stack"
+
+  responses:
+    200:
+      description: The requested operation was performed correctly,
+        and a result body may be present in the response if described by the Content-Type and Content-Length response headers.
+    201:
+      description: The request has been fulfilled and has resulted in one or more new resources being created.
+    204:
+      description: The requested operation was received and accepted, and no further response information is available.
+        This is usually reserved for DELETE requests.
+    400:
+      description: The request was either incorrectly formatted or contained unexpected fields or values.
+        It must be corrected before it can be retried.
+    404:
+      description: The origin server did not find a current representation for the target resource or is not willing
+        to disclose that one exists.
+    500:
+      description: The server encountered an internal error while processing the request. The operation may or may not
+        fail again if it is retried.
