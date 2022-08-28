@@ -1,11 +1,6 @@
 **How to run and debug project in local env?**
 
-1. create a repo for all python projects and install virtualenv python on Win/Linux
-cd ~
-mkdir dev
-cd dev
-mkdir .virtualenvs
-pip install virtualenv
+1. create a repo for all python projects and install virtualenv python on Win/Linux: cd ~; mkdir dev; cd dev; mkdir .virtualenvs; pip install virtualenv
 
 2. clone a python project from git, as
 git clone git@github.com:weiwei2001/RPN-API.git
